@@ -3,5 +3,6 @@ cassandra_dependencies:
   - curl
   - apt-transport-https
   - ca-certificates
+  - python-support
 
 cassandra_default_package: "cassandra=3.0.2"
