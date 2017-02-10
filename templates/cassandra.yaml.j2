@@ -229,7 +229,7 @@ seed_provider:
 {% elif cassandra_seeds | length > 2 %}
           - seeds: "{{ cassandra_seeds }}"
 {% else %}
-          - seeds: "{% for host in groups[cassandra_host_groups] %}{{host['ansible_default_ipv4']['address']}}{% if not loop.last %},{% endif %}%}"
+          - seeds: "{% for host in groups[cassandra_host_groups] %}{{host['ansible_default_ipv4']['address']}}{% if not loop.last %},{% endif %}{% endfor %}"
 {% endif %}
 
 # For workloads with more data than can fit in memory, Cassandra's
