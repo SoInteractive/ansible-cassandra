@@ -1,0 +1,28 @@
+---
+# TODO test removal (and check if this dir isn't created automatically)
+- name: Check if test cluster exists
+  stat:
+    path: /var/lib/cassandra/data/system
+  register: test_cluster
+
+- name: Stop cassandra
+  service:
+    name: cassandra
+    state: stopped
+  notify: restart cassandra
+  when: test_cluster.stat.exists
+
+- name: Remove test cluster
+  file:
+    path: /var/lib/cassandra/data/system
+    state: absent
+  when: test_cluster.stat.exists
+
+- name: Configure cassandra
+  template:
+    src: cassandra.yaml.j2
+    dest: "{{ cassandra_root_dir }}/cassandra.yaml"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart cassandra

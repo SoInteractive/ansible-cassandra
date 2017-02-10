@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  author: Pawel Krupa
+  description: Cassandra
+  company: Sointeractive
+  min_ansible_version: 1.2
+  platforms:
+   - name: EL
+     versions:
+       - 7
+   - name: Ubuntu
+     versions:
+       - trusty
+       - xenial
+  galaxy_tags:
+   - cassandra
+   - database
+
+dependencies:
+  - { role: java }
+

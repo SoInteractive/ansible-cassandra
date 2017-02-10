@@ -1,0 +1,35 @@
+---
+#- name: Install dependencies
+#  package:
+#    name: "{{ item }}"
+#    state: present
+#  with_items: "{{ cassandra_dependencies }}"
+
+- name: Add repository GPG key [Debian/Ubuntu]
+  apt_key:
+    url: "http://debian.datastax.com/debian/repo_key"
+    state: present
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Add cassandra repository [Debian/Ubuntu]
+  apt_repository:
+    repo: "deb http://debian.datastax.com/community stable main"
+    state: present
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Add cassandra repository [RedHat]
+  template:
+    src: datastax.repo
+    dest: /etc/yum.repos.d/datastax.repo
+  when: ansible_pkg_mgr == 'yum'
+
+- set_fact:
+    cassandra_package: "{{ cassandra_default_package }}"
+  when: cassandra_package == None
+
+- name: Install Cassandra
+  package:
+    name: "{{ cassandra_package }}"
+    state: present
+  notify: restart cassandra
+
