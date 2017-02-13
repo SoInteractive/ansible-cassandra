@@ -2,12 +2,13 @@
 cassandra_package:
 cassandra_host_group: "cassandra"
 
-cassandra_cluster_username:
+cassandra_cluster_user:
 cassandra_cluster_password: 
 cassandra_port: 9042
 cassandra_interface: "{{ ansible_default_ipv4.interface }}"
 #cassandra_interface: "lo"
-cassandra_address: "{{ ansible_facts['ansible_' + cassandra_interface]['ipv4']['address'] }}"
+#cassandra_address: "{{ ansible_facts['ansible_' + cassandra_interface]['ipv4']['address'] }}"
+cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
 cassandra_seeds: []
 
 cassandra_cluster_name: "Test Cluster"
