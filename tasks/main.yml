@@ -26,6 +26,7 @@
 
 - include: authentication.yml
   run_once: true
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
   when:
     - cassandra_cluster_user != None
     - cassandra_cluster_password != None
