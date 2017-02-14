@@ -1,6 +1,6 @@
 ---
 cassandra_package:
-cassandra_host_group: "cassandra"
+cassandra_hosts_group: "cassandra"
 
 cassandra_cluster_user:
 cassandra_cluster_password: 
