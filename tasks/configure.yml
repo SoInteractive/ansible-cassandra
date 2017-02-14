@@ -1,8 +1,4 @@
 ---
-- set_fact:
-    cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
-  when: cassandra_address is undefined
-
 # TODO test removal (and check if this dir isn't created automatically)
 - name: Check if test cluster exists
   stat:

@@ -10,6 +10,10 @@
   tags:
     - always
 
+- set_fact:
+    cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
+  when: cassandra_address is undefined
+
 - include: install.yml
 
 - include: configure.yml
