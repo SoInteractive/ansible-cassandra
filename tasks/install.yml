@@ -46,3 +46,8 @@
     state: present
   notify: restart cassandra
 
+- name: Download jolokia
+  get_url:
+    url: "{{ jolokia_agent_jar_url }}"
+    dest: /usr/share/java/jolokia-jvm-agent.jar
+  when: cassandra_jolokia_enable

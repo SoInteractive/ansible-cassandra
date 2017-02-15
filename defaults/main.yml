@@ -9,6 +9,11 @@ cassandra_interface: "{{ ansible_default_ipv4.interface }}"
 #cassandra_address: # Will be set automatically
 cassandra_seeds: []
 
+# enable monitoring
+cassandra_jolokia_enable: true
+cassandra_jolokia_host: localhost
+cassandra_jolokia_port: 8778
+
 cassandra_cluster_name: "Test Cluster"
 
 cassandra_root_dir: /etc/cassandra

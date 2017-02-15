@@ -26,3 +26,10 @@
     group: "root"
     mode: 0644
   notify: restart cassandra
+
+- name: Enable jolokia
+  lineinfile: 
+    dest: /etc/cassandra/cassandra-env.sh
+    line: 'JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/java/jolokia-jvm-agent.jar=port={{ cassandra_jolokia_port }},host={{ cassandra_jolokia_host }}"' 
+  notify: restart cassandra
+  when: cassandra_jolokia_enable
