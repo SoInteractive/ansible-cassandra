@@ -21,6 +21,14 @@
     state: present
   with_items: "{{ cassandra_dependencies }}"
 
+- name: Install cassandra-driver
+  pip:
+    name: cassandra-driver
+    state: present
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
+
 - name: Add repository GPG key [Debian/Ubuntu]
   apt_key:
     url: "http://debian.datastax.com/debian/repo_key"
@@ -52,10 +60,16 @@
     state: present
   notify: restart cassandra
 
+#- name: Download jolokia
+#  get_url:
+#    url: "{{ cassandra_jolokia_agent_url }}"
+#    dest: /usr/share/java/jolokia-jvm-agent.jar
+#  environment:
+#    http_proxy: "{{ http_proxy | default('') }}"
+#    https_proxy: "{{ https_proxy | default('') }}"
+#  when: cassandra_jolokia_enable
 - name: Download jolokia
-  get_url:
-    url: "{{ jolokia_agent_jar_url }}"
-    dest: /usr/share/java/jolokia-jvm-agent.jar
+  command: "curl -L {{ cassandra_jolokia_agent_url }} -o /usr/share/java/jolokia-jvm-agent.jar"
   environment:
     http_proxy: "{{ http_proxy | default('') }}"
     https_proxy: "{{ https_proxy | default('') }}"

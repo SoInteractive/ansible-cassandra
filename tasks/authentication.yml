@@ -1,4 +1,9 @@
 ---
+- name: Wait for cassandra to start
+  wait_for:
+    host: "{{ cassandra_address }}"
+    port: "{{ cassandra_port }}"
+
 - name: Check if authentication setup is finished
   shell: "cqlsh -e 'SELECT now() FROM system.local;' -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }}:{{ cassandra_port }}"
   register: user_created
@@ -9,12 +14,12 @@
 
 - name: Setup new user and password
   shell: "cqlsh -e 'CREATE USER {{ cassandra_cluster_username }} WITH PASSWORD '{{ cassandra_cluster_password }}' SUPERUSER;' -u cassandra -p cassandra {{ cassandra_address }}:{{ cassandra_port }}"
-  when: user_created | false
+  when: user_created | failed
 
 - name: Check connection with new user
   shell: "cqlsh -e 'SELECT now() FROM system.local;' -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }}:{{ cassandra_port }}"
-  when: user_created | false
+  when: user_created | failed
 
 - name: Change password for cassandra user
   shell: "cqlsh -e 'ALTER USER cassandra WITH PASSWORD {{ cassandra_default_password }};' -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }}:{{ cassandra_port }}"
-  when: user_created | false
+  when: user_created | failed

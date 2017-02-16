@@ -2,7 +2,7 @@
 cassandra_package:
 cassandra_hosts_group: "cassandra"
 
-cassandra_cluster_user:
+cassandra_cluster_username:
 cassandra_cluster_password: 
 cassandra_port: 9042
 cassandra_interface: "{{ ansible_default_ipv4.interface }}"
@@ -13,6 +13,7 @@ cassandra_seeds: []
 cassandra_jolokia_enable: true
 cassandra_jolokia_host: localhost
 cassandra_jolokia_port: 8778
+cassandra_jolokia_agent_url: "http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/1.3.4/jolokia-jvm-1.3.4-agent.jar"
 
 cassandra_cluster_name: "Test Cluster"
 

@@ -1,4 +1,32 @@
 ---
+- name: Ensure data dirs exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: cassandra
+    group: cassandra
+  with_items: "{{ cassandra_data_dirs }}"
+
+- name: Configure locale
+  lineinfile:
+    dest: /etc/locale.gen
+    regexp: '^#? ?en_US.UTF-8 UTF-8'
+    line: 'en_US.UTF-8 UTF-8'
+    state: present
+  register: added_locale
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Rebuild locale
+  command: /usr/sbin/locale-gen
+  when: ansible_distribution == 'Ubuntu' and added_locale | changed
+
+- name: Set CQLSH env variables
+  lineinfile:
+    dest: /etc/environment
+    line: "CQLSH_NO_BUNDLED=true"
+    regexp: ".*{{ CQLSH_NO_BUNDLED }}.*$"
+    state: present
+
 # TODO test removal (and check if this dir isn't created automatically)
 - name: Check if test cluster exists
   stat:
