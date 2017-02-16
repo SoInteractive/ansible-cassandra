@@ -4,6 +4,9 @@
   apt_key:
     url: "http://repo.ajenti.org/debian/key"
     state: present
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
   when: ansible_distribution_release  == "xenial"
 
 - name: Add ajenti repo key for ubuntu 16.04
@@ -22,6 +25,9 @@
   apt_key:
     url: "http://debian.datastax.com/debian/repo_key"
     state: present
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
   when: ansible_pkg_mgr == 'apt'
 
 - name: Add cassandra repository [Debian/Ubuntu]
@@ -50,4 +56,7 @@
   get_url:
     url: "{{ jolokia_agent_jar_url }}"
     dest: /usr/share/java/jolokia-jvm-agent.jar
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
   when: cassandra_jolokia_enable
