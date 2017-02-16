@@ -20,3 +20,7 @@
 - name: Change password for cassandra user
   shell: "cqlsh -e \"ALTER USER cassandra WITH PASSWORD 'cassandra';\" -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }} {{ cassandra_port }}"
   when: user_created | failed
+
+- name: Proper replication of users collection
+  shell: "cqlsh -e \"ALTER KEYSPACE system_auth WITH REPLICATION = { 'class':'SimpleStrategy', 'replication_factor':{{ groups[cassandra_hosts_group] | length }} } ;\" -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }} {{ cassandra_port }}"
+  when: user_created | failed
