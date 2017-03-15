@@ -30,3 +30,6 @@
   when:
     - cassandra_cluster_username != None
     - cassandra_cluster_password != None
+
+- include: metrics.yml
+  when: cassandra_jolokia_enable
