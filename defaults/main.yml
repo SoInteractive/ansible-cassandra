@@ -17,7 +17,7 @@ cassandra_jolokia_agent_url: "http://search.maven.org/remotecontent?filepath=org
 
 cassandra_cluster_name: "Test Cluster"
 
-cassandra_num_tokens: 256
+cassandra_num_tokens: 1
 
 cassandra_root_dir: /etc/cassandra
 cassandra_data_dirs: 
