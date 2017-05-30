@@ -45,7 +45,7 @@
 - name: Enable metrics
   lineinfile: 
     dest: /etc/cassandra/cassandra-env.sh
-    line: 'JVM_OPTS="$JVM_OPTS -javaagent:'/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar={{ cassandra_jmx_exporter_port }}:{{ cassandra_jmx_exporter_config'"'
+    line: 'JVM_OPTS="$JVM_OPTS -javaagent:'/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar={{ cassandra_jmx_exporter_port }}:{{ cassandra_root_dir }}/cassandra.yaml'"'
   notify: restart cassandra
   when: cassandra_metrics_enable
 

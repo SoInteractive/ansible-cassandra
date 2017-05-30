@@ -698,3 +698,18 @@ inter_dc_tcp_nodelay: false
 # for sequential access. Note: This could be harmful for fat rows, see CASSANDRA-4937
 # for further details on that topic.
 #preheat_kernel_page_cache: false
+
+{% if cassandra_metrics_enable is true %}
+lowercaseOutputLabelNames: true
+lowercaseOutputName: true
+rules:
+- pattern: org.apache.cassandra.metrics<type=(Connection|Streaming), scope=(\S*), name=(\S*)><>(Count|Value)
+  name: cassandra_$1_$3
+  labels:
+    address: "$2"
+- pattern: org.apache.cassandra.metrics<type=(\S*)(?:, ((?!scope)\S*)=(\S*))?(?:, scope=(\S*))?,
+    name=(\S*)><>(Count|Value)
+  name: cassandra_$1_$5
+  labels:
+    "$1": "$4"
+{% endif %}
