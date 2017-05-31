@@ -1,11 +1,14 @@
 ---
-- name: Ensure directory exists
-  file:
-    path: "/etc/telegraf/telegraf.d"
-    state: directory
+- name: download jmx_exporter binary to local folder
+  become: no
+  get_url:
+    url: "{{ cassandra_jmx_exporter_url }}"
+    dest: "/tmp/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+    validate_certs: no
+  run_once: true
+  delegate_to: localhost
 
-- name: Create telegraf plugin config
-  template:
-    src: cassandra_telegraf.conf.j2
-    dest: /etc/telegraf/telegraf.d/cassandra.conf
-
+- name: propagate jmx_exporter binary
+  copy:
+   src: "/tmp/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+   dest: "/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"

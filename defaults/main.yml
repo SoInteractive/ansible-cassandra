@@ -10,10 +10,10 @@ cassandra_interface: "{{ ansible_default_ipv4.interface }}"
 cassandra_seeds: []
 
 # enable monitoring
-cassandra_jolokia_enable: true
-cassandra_jolokia_host: localhost
-cassandra_jolokia_port: 8778
-cassandra_jolokia_agent_url: "http://search.maven.org/remotecontent?filepath=org/jolokia/jolokia-jvm/1.3.4/jolokia-jvm-1.3.4-agent.jar"
+cassandra_metrics: true
+cassandra_jmx_exporter_version: 0.9
+cassandra_jmx_exporter_port: 7080
+cassandra_jmx_exporter_url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/{{ cassandra_jmx_exporter_version }}/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
 
 cassandra_cluster_name: "Test Cluster"
 
