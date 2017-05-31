@@ -7,10 +7,8 @@
     validate_certs: no
   run_once: true
   delegate_to: localhost
-  when: cassandra_metrics_enable
 
 - name: propagate jmx_exporter binary
   copy:
    src: "/tmp/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
    dest: "/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
-  when: cassandra_metrics_enable

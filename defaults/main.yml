@@ -10,10 +10,10 @@ cassandra_interface: "{{ ansible_default_ipv4.interface }}"
 cassandra_seeds: []
 
 # enable monitoring
-cassandra_metrics_enable: true
+cassandra_metrics: true
 cassandra_jmx_exporter_version: 0.9
 #cassandra_jmx_exporter_host: localhost
-cassandra_jmx_exporter_port: 7070
+cassandra_jmx_exporter_port: 7080
 cassandra_jmx_exporter_url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/{{ cassandra_jmx_exporter_version }}/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
 
 cassandra_cluster_name: "Test Cluster"
