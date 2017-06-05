@@ -1,21 +1,18 @@
 ---
 galaxy_info:
   author: Pawel Krupa, Roman Demachkovych (jmx_exporter)
-  description: Cassandra
+  description: Cassandra distributed database
   company: Sointeractive
-  min_ansible_version: 1.2
+  license: MIT
+  min_ansible_version: 1.6
   platforms:
-   - name: EL
-     versions:
-       - 7
-   - name: Ubuntu
-     versions:
-       - trusty
-       - xenial
+  - name: Ubuntu
+    versions:
+    - xenial
   galaxy_tags:
-   - cassandra
-   - database
+  - cassandra
+  - database
+  - nosql
 
 dependencies:
-  - { role: java }
-
+  - SoInteractive.java

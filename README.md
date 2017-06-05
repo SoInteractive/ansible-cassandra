@@ -1,46 +1,30 @@
-Ansible role to install and configure Cassandra cluster
-=======================================
-This role installs Cassandra cluster and metrics exporter if required
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Cassandra_logo.svg/1280px-Cassandra_logo.svg.png" alt="cassandra logo" title="cassandra" align="right" height="60" /></p>
 
-Role Variables
---------------
+Ansible Role: cassandra
+=======================
 
-Below are the roles variables with the respective default values. Usually you'd only change the cassandra_jmx_exporter_version.
-Also pay attention to cassandra_hosts_group varible.
-```yml
-cassandra_package:
-cassandra_hosts_group: "cassandra"
+[![Build Status](https://ci.devops.sosoftware.pl/buildStatus/icon?job=SoInteractive/cassandra/master)](https://ci.devops.sosoftware.pl/blue/organizations/jenkins/SoInteractive%2Fcassandra/activity) [![License](https://img.shields.io/badge/license-MIT%20License-brightgreen.svg)](https://opensource.org/licenses/MIT) [![Ansible Role](https://img.shields.io/ansible/role/99999.svg)](https://galaxy.ansible.com/SoInteractive/cassandra/) [![Twitter URL](https://img.shields.io/twitter/follow/sointeractive.svg?style=social&label=Follow%20%40SoInteractive)](https://twitter.com/sointeractive)
 
-cassandra_cluster_username:
-cassandra_cluster_password: 
-cassandra_port: 9042
-cassandra_interface: "{{ ansible_default_ipv4.interface }}"
-#cassandra_address: # Will be set automatically
-cassandra_seeds: []
+This role installs Cassandra cluster and metrics exporter
 
-# enable monitoring
-cassandra_metrics: true
-cassandra_jmx_exporter_version: 0.9
-cassandra_jmx_exporter_port: 7080
-cassandra_jmx_exporter_url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/{{ cassandra_jmx_exporter_version }}/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+Example usage
+-------------
 
-cassandra_cluster_name: "Test Cluster"
-
-cassandra_num_tokens: 256
-
-cassandra_root_dir: /etc/cassandra
-cassandra_data_dirs: 
-  - "/var/lib/cassandra/data"
-  
-cassandra_commitlog_dir: "/var/lib/cassandra/commitlog"
-cassandra_saved_caches_dir: "/var/lib/cassandra/saved_caches"
+Use it in a playbook as follows:
+```yaml
+- hosts: cassandra
+  become: true
+  roles:
+    - SoInteractive.java
+    - SoInteractive.cassandra
 ```
 
-Example Playbook
-----------------
+Have a look at the [defaults/main.yml](defaults/main.yml) for role variables
+that can be overridden.
 
-    - hosts: cassandra
-      roles:
-         - java
-         - cassandra
+TODO
+----
 
+- Tests, tests, tests
+- Test clustering
+- Test credential changing

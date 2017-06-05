@@ -1,0 +1,13 @@
+---
+ansible:
+  playbook: tests/playbook.yml
+driver:
+  name: docker
+verifier:
+  name: testinfra
+docker:
+  containers:
+    - name: cassandra-xenial
+      image: solita/ubuntu-systemd
+      image_version: 16.04
+      privileged: true

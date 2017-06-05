@@ -10,5 +10,6 @@
 
 - name: propagate jmx_exporter binary
   copy:
-   src: "/tmp/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
-   dest: "/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+    src: "/tmp/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+    dest: "/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+    force: no

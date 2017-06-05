@@ -3,4 +3,3 @@
   service:
     name: cassandra
     state: restarted
-

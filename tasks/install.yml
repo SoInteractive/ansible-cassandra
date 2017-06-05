@@ -50,7 +50,8 @@
     dest: /etc/yum.repos.d/datastax.repo
   when: ansible_pkg_mgr == 'yum'
 
-- set_fact:
+- name: Set cassandra package name
+  set_fact:
     cassandra_package: "{{ cassandra_default_package }}"
   when: cassandra_package == None
 

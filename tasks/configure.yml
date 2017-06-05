@@ -14,24 +14,22 @@
     regexp: ".*CQLSH_NO_BUNDLED.*$"
     state: present
 
-# TODO test removal (and check if this dir isn't created automatically)
-- name: Check if test cluster exists
-  stat:
-    path: /var/lib/cassandra/data/system
-  register: test_cluster
+- block:
+  - name: Stop cassandra
+    service:
+      name: cassandra
+      state: stopped
 
-- name: Stop cassandra
-  service:
-    name: cassandra
-    state: stopped
-  notify: restart cassandra
-  when: test_cluster.stat.exists
+  - name: Remove test cluster
+    file:
+      path: /var/lib/cassandra/data/system
+      state: absent
 
-- name: Remove test cluster
-  file:
-    path: /var/lib/cassandra/data/system
-    state: absent
-  when: test_cluster.stat.exists
+  - name: Start cassandra
+    service:
+      name: cassandra
+      state: started
+  when: cassandra_remove_test
 
 - name: Configure cassandra
   template:
@@ -43,7 +41,7 @@
   notify: restart cassandra
 
 - name: Enable metrics
-  lineinfile: 
+  lineinfile:
     dest: /etc/cassandra/cassandra-env.sh
     line: JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar={{ cassandra_jmx_exporter_port }}:{{ cassandra_root_dir }}/cassandra.yaml"
   notify: restart cassandra

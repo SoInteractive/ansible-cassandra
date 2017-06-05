@@ -10,19 +10,19 @@
   tags:
     - always
 
-- set_fact:
+- name: Set cassandra address
+  set_fact:
     cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
   when: cassandra_address is undefined
 
 - include: install.yml
 
-- include: configure.yml
-
-- name: Start cassandra
+- name: Ensure cassandra is enabled
   service:
     name: cassandra
-    state: started
     enabled: yes
+
+- include: configure.yml
 
 - include: authentication.yml
   run_once: true

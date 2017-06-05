@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+    - name: install testing suite
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - iproute
+        - net-tools
+
+- hosts: all
+  roles:
+    - cassandra
+  vars:
+    cassandra_hosts_group: all

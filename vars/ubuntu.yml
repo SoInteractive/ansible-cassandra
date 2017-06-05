@@ -1,6 +1,6 @@
 ---
 cassandra_dependencies:
-  - curl
+#  - curl
   - python-pip
   - apt-transport-https
   - ca-certificates
