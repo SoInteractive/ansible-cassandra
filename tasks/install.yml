@@ -78,16 +78,17 @@
       state: stopped
 
   - name: Remove default directory
-    command: rm -rf /var/lib/cassandra
+    command: "rm -rf /var/lib/cassandra"
     args:
       removes: /var/lib/cassandra
+    tags: skip_ansible_lint
 
   - name: Create default cassandra directory
     file:
       path: /var/lib/cassandra
       state: directory
-      owner: cassandra 
-      group: cassandra 
+      owner: cassandra
+      group: cassandra
   when:
   - install_package|changed
   - not data_dir.stat.exists
