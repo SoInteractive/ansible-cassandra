@@ -11,7 +11,7 @@ pipeline {
   options {
     disableConcurrentBuilds()
     buildDiscarder(logRotator(numToKeepStr: '30'))
-    timeout(time: 15, unit: 'MINUTES')
+    timeout(time: 20, unit: 'MINUTES')
   }
   environment {
     GIT_COMMITER = sh( script: "git show -s --pretty=%an", returnStdout: true ).trim()
