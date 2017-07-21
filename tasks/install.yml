@@ -55,8 +55,40 @@
     cassandra_package: "{{ cassandra_default_package }}"
   when: cassandra_package == None
 
+- name: Check if default cassandra data dir exists
+  stat:
+    path: /var/lib/cassandra
+  register: data_dir
+
 - name: Install Cassandra
   package:
     name: "{{ cassandra_package }}"
     state: present
   notify: restart cassandra
+  register: install_package
+
+- block:
+  - name: Wait a bit
+    pause:
+      seconds: 10
+
+  - name: Stop cassandra
+    service:
+      name: cassandra
+      state: stopped
+
+  - name: Remove default directory
+    command: "rm -rf /var/lib/cassandra"
+    args:
+      removes: /var/lib/cassandra
+    tags: skip_ansible_lint
+
+  - name: Create default cassandra directory
+    file:
+      path: /var/lib/cassandra
+      state: directory
+      owner: cassandra
+      group: cassandra
+  when:
+  - install_package|changed
+  - not data_dir.stat.exists
