@@ -1,5 +1,5 @@
 ---
-- name: Wait for cassandra to start
+- name: Be sure that Cassandra started
   wait_for:
     host: "{{ cassandra_address }}"
     port: "{{ cassandra_port }}"

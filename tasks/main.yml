@@ -1,15 +1,4 @@
 ---
-- name: Gather variables for each operating system
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
-    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-    - "{{ ansible_distribution | lower }}.yml"
-    - "{{ ansible_os_family | lower }}.yml"
-  tags:
-    - always
-
 - name: Set cassandra address
   set_fact:
     cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
@@ -17,12 +6,26 @@
 
 - include: install.yml
 
-- name: Ensure cassandra is enabled
-  service:
-    name: cassandra
-    enabled: yes
-
 - include: configure.yml
+
+- include: metrics.yml
+  when: cassandra_metrics
+
+- name: Start configured Cassandra
+  docker_container:
+    name: cassandra
+    image: "cassandra:{{ cassandra_version }}"
+    state: started
+    restart_policy: unless-stopped
+    network_mode: host
+#    ports:
+#      - "7000:7000"
+#      - "9042:9042"
+    volumes:
+      - "cass-data-dir:{{ cassandra_docker_data_dir }}:rw"
+      - "cass-root-dir:{{ cassandra_docker_root_dir }}:rw"
+      - "cass-java-dir:{{ cassandra_docker_java_dir }}:rw"
+
 
 - include: authentication.yml
   run_once: true
@@ -30,6 +33,3 @@
   when:
     - cassandra_cluster_username != None
     - cassandra_cluster_password != None
-
-- include: metrics.yml
-  when: cassandra_metrics

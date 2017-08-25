@@ -1,94 +1,15 @@
 ---
-# Need to add ajenti repo for python-support package
-- name: Add ajenti repo key for ubuntu 16.04
-  apt_key:
-    url: "http://repo.ajenti.org/debian/key"
+- name: Download and run Cassandra instance
+  docker_container:
+    name: cassandra
+    image: "cassandra:{{ cassandra_version }}"
     state: present
-  environment:
-    http_proxy: "{{ http_proxy | default('') }}"
-    https_proxy: "{{ https_proxy | default('') }}"
-  when: ansible_distribution_release  == "xenial"
-
-- name: Add ajenti repo key for ubuntu 16.04
-  apt_repository:
-    repo: "deb http://repo.ajenti.org/ng/debian main main ubuntu"
-    state: present
-  when: ansible_distribution_release  == "xenial"
-
-- name: Install dependencies
-  package:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ cassandra_dependencies }}"
-
-- name: Install cassandra-driver
-  pip:
-    name: cassandra-driver
-    state: present
-  environment:
-    http_proxy: "{{ http_proxy | default('') }}"
-    https_proxy: "{{ https_proxy | default('') }}"
-
-- name: Add repository GPG key [Debian/Ubuntu]
-  apt_key:
-    url: "http://debian.datastax.com/debian/repo_key"
-    state: present
-  environment:
-    http_proxy: "{{ http_proxy | default('') }}"
-    https_proxy: "{{ https_proxy | default('') }}"
-  when: ansible_pkg_mgr == 'apt'
-
-- name: Add cassandra repository [Debian/Ubuntu]
-  apt_repository:
-    repo: "deb http://debian.datastax.com/community stable main"
-    state: present
-  when: ansible_pkg_mgr == 'apt'
-
-- name: Add cassandra repository [RedHat]
-  template:
-    src: datastax.repo
-    dest: /etc/yum.repos.d/datastax.repo
-  when: ansible_pkg_mgr == 'yum'
-
-- name: Set cassandra package name
-  set_fact:
-    cassandra_package: "{{ cassandra_default_package }}"
-  when: cassandra_package == None
-
-- name: Check if default cassandra data dir exists
-  stat:
-    path: /var/lib/cassandra
-  register: data_dir
-
-- name: Install Cassandra
-  package:
-    name: "{{ cassandra_package }}"
-    state: present
-  notify: restart cassandra
-  register: install_package
-
-- block:
-  - name: Wait a bit
-    pause:
-      seconds: 10
-
-  - name: Stop cassandra
-    service:
-      name: cassandra
-      state: stopped
-
-  - name: Remove default directory
-    command: "rm -rf /var/lib/cassandra"
-    args:
-      removes: /var/lib/cassandra
-    tags: skip_ansible_lint
-
-  - name: Create default cassandra directory
-    file:
-      path: /var/lib/cassandra
-      state: directory
-      owner: cassandra
-      group: cassandra
-  when:
-  - install_package|changed
-  - not data_dir.stat.exists
+    restart_policy: unless-stopped
+    network_mode: host
+#    ports:
+#      - "7000:7000"
+#      - "9042:9042"
+    volumes:
+      - "cass-data-dir:{{ cassandra_docker_data_dir }}:rw"
+      - "cass-root-dir:{{ cassandra_docker_root_dir }}:rw"
+      - "cass-java-dir:{{ cassandra_docker_java_dir }}:rw"

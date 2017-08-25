@@ -1,8 +1,13 @@
 ---
-cassandra_package:
-cassandra_hosts_group: "cassandra"
+cassandra_data_dir: cass-data-dir #volume name!
+cassandra_root_dir: cass-root-dir
+cassandra_java_dir: cass-java-dir
+cassandra_docker_data_dir: /var/lib/cassandra
+cassandra_docker_root_dir: /etc/cassandra
+cassandra_docker_java_dir: /usr/share/java
+cassandra_version: 2.2
 
-cassandra_remove_test: false
+cassandra_hosts_group: "cassandra"
 
 cassandra_cluster_username:
 cassandra_cluster_password:
@@ -12,18 +17,14 @@ cassandra_interface: "{{ ansible_default_ipv4.interface }}"
 cassandra_seeds: []
 
 # enable monitoring
-cassandra_metrics: true
+cassandra_metrics: False
 cassandra_jmx_exporter_version: 0.9
 cassandra_jmx_exporter_port: 7080
 cassandra_jmx_exporter_url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/{{ cassandra_jmx_exporter_version }}/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
 
-cassandra_cluster_name: "Test Cluster"
+cassandra_cluster_name: "Cassandra Cluster"
 
 cassandra_num_tokens: 256
-
-cassandra_root_dir: /etc/cassandra
-cassandra_data_dirs:
-  - "/var/lib/cassandra/data"
 
 cassandra_commitlog_dir: "/var/lib/cassandra/commitlog"
 cassandra_saved_caches_dir: "/var/lib/cassandra/saved_caches"

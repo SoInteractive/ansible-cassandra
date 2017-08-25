@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Pawel Krupa, Roman Demachkovych (jmx_exporter)
+  author: Pawel Krupa, Roman Demachkovych (jmx_exporter), Tomasz Grzesik (docker)
   description: Cassandra distributed database
   company: Sointeractive
   license: MIT
@@ -14,5 +14,5 @@ galaxy_info:
   - database
   - nosql
 
-dependencies:
-  - SoInteractive.java
+dependencies: []
+#  - SoInteractive.docker

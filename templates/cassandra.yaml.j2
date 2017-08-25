@@ -1,4 +1,6 @@
-# Cassandra storage config YAML 
+# Ansible generated!!!
+
+# Cassandra storage config YAML
 
 # NOTE:
 #   See http://wiki.apache.org/cassandra/StorageConfiguration for
@@ -95,9 +97,7 @@ partitioner: org.apache.cassandra.dht.Murmur3Partitioner
 # will spread data evenly across them, subject to the granularity of
 # the configured compaction strategy.
 data_file_directories:
-{% for dir in cassandra_data_dirs %}
-    - {{ dir }}
-{% endfor %}
+    - {{ cassandra_docker_data_dir }}/data
 # commit log
 commitlog_directory: {{ cassandra_commitlog_dir }}
 
@@ -304,7 +304,7 @@ listen_address: {{ cassandra_address }}
 
 # Address to broadcast to other Cassandra nodes
 # Leaving this blank will set it to the same value as listen_address
-broadcast_address: 
+broadcast_address: {{ cassandra_address }}
 
 # Internode authentication backend, implementing IInternodeAuthenticator;
 # used to allow/disallow connections from peer nodes.
