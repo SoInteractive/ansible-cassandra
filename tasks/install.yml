@@ -11,19 +11,12 @@
     name: docker
     state: started
 
-#- name: Check if docker network exists
-#  docker_network:
-#    name: cassandra
-
 - name: Download and run Cassandra instance
   docker_container:
     name: cassandra
     image: "cassandra:{{ cassandra_version }}"
     state: started
     restart_policy: unless-stopped
-    network_mode: host
-#    networks:
-#      - name: cassandra
     ports:
       - "7000:7000"
       - "9042:9042"
@@ -31,3 +24,4 @@
       - "{{ cassandra_data_dir }}:{{ cassandra_docker_data_dir }}:rw"
     env:
       CASSANDRA_SEEDS: "{% for host in groups[cassandra_hosts_group] %}{{ hostvars[host]['cassandra_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+      CASSANDRA_BROADCAST_ADDRESS: "{{ cassandra_address }}"

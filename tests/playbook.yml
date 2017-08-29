@@ -13,38 +13,7 @@
         name:
           - docker-py
           - cqlsh
-
-- hosts: all
-  become: yes
-  tasks:
-    - name: "Get ip node 1"
-      local_action: shell docker inspect --format \{\{.NetworkSettings.IPAddress\}\} node1
-      register: node_ip_1
-      changed_when: False
-    - name: "Get ip node 2"
-      local_action: shell docker inspect --format \{\{.NetworkSettings.IPAddress\}\}  node2
-      register: node_ip_2
-      changed_when: False
-    - name: "Get ip node 3"
-      local_action: shell docker inspect --format \{\{.NetworkSettings.IPAddress\}\}  node3
-      register: node_ip_3
-      changed_when: False
-
-- hosts: all
-  become: yes
-  tasks:
-    - name: "Set fact"
-      set_fact:
-        node_ip: "{{ node_ip_1.stdout }}"
-      when: inventory_hostname  == 'node1'
-    - name: "Set fact"
-      set_fact:
-        node_ip: "{{ node_ip_2.stdout }}"
-      when: inventory_hostname  == 'node2'
-    - name: "Set fact"
-      set_fact:
-        node_ip: "{{ node_ip_3.stdout }}"
-      when: inventory_hostname  == 'node3'
+      changed_when: false
 
 - hosts: all
   roles:

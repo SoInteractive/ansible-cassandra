@@ -4,10 +4,6 @@
     cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
   when: cassandra_address is undefined
 
-- name: debug
-  debug:
-    var: hostvars[inventory_hostname]
-
 - include: install.yml
 
 - include: tests.yml
