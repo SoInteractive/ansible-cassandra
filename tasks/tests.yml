@@ -1,0 +1,10 @@
+---
+
+- name: Test if cassandra is up
+  wait_for:
+    host: "{{ cassandra_address }}"
+    port: 9042
+
+- name: Check login with default user
+  command: docker run -t cassandra:{{ cassandra_version }} sh -c 'cqlsh -e exit -u cassandra -p cassandra {{ cassandra_address }}'
+  changed_when: false

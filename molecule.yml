@@ -6,36 +6,36 @@ driver:
   name: docker
 verifier:
   name: testinfra
-docker:
-  containers:
-    - name: cassandra-dind
-      image: jpetazzo/dind
-      image_version: latest
-      privileged: true
-
 #docker:
 #  containers:
-#  - name: node1
-#    ansible_groups:
-#      - cluster_service
-#    image: jpetazzo/dind
-#    image_version: latest
-#    privileged: True
-#    port_bindings:
-#      7000: 7000
-#  - name: node2
-#    ansible_groups:
-#      - cluster_service
-#    image: jpetazzo/dind
-#    image_version: latest
-#    privileged: True
-#    port_bindings:
-#      7000: 7001
-#  - name: node3
-#    ansible_groups:
-#      - cluster_service
-#    image: jpetazzo/dind
-#    image_version: latest
-#    privileged: True
-#    port_bindings:
-#      7000: 7002
+#    - name: cassandra-dind
+#      image: jpetazzo/dind
+#      image_version: latest
+#      privileged: true
+
+docker:
+  containers:
+  - name: node1
+    ansible_groups:
+      - cluster_service
+    image: jpetazzo/dind
+    image_version: latest
+    privileged: True
+    port_bindings:
+      7000: 7000
+  - name: node2
+    ansible_groups:
+      - cluster_service
+    image: jpetazzo/dind
+    image_version: latest
+    privileged: True
+    port_bindings:
+      7000: 7001
+  - name: node3
+    ansible_groups:
+      - cluster_service
+    image: jpetazzo/dind
+    image_version: latest
+    privileged: True
+    port_bindings:
+      7000: 7002

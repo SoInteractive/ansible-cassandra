@@ -1,1 +1,4 @@
-localhost
+[cassandra]
+172.17.0.2 node1
+172.17.0.3 node2
+172.17.0.3 node3

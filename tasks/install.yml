@@ -1,15 +1,33 @@
 ---
+- name: Make sure data dir exist
+  file:
+    path: "{{ cassandra_data_dir }}"
+    state: directory
+    group: docker
+    mode: 0777
+
+- name: Make sure that docker is installed and running
+  service:
+    name: docker
+    state: started
+
+#- name: Check if docker network exists
+#  docker_network:
+#    name: cassandra
+
 - name: Download and run Cassandra instance
   docker_container:
     name: cassandra
     image: "cassandra:{{ cassandra_version }}"
-    state: present
+    state: started
     restart_policy: unless-stopped
     network_mode: host
-#    ports:
-#      - "7000:7000"
-#      - "9042:9042"
+#    networks:
+#      - name: cassandra
+    ports:
+      - "7000:7000"
+      - "9042:9042"
     volumes:
-      - "cass-data-dir:{{ cassandra_docker_data_dir }}:rw"
-      - "cass-root-dir:{{ cassandra_docker_root_dir }}:rw"
-      - "cass-java-dir:{{ cassandra_docker_java_dir }}:rw"
+      - "{{ cassandra_data_dir }}:{{ cassandra_docker_data_dir }}:rw"
+    env:
+      CASSANDRA_SEEDS: "{% for host in groups[cassandra_hosts_group] %}{{ hostvars[host]['cassandra_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"

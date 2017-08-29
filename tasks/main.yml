@@ -4,32 +4,11 @@
     cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
   when: cassandra_address is undefined
 
+- name: debug
+  debug:
+    var: hostvars[inventory_hostname]
+
 - include: install.yml
 
-- include: configure.yml
-
-- include: metrics.yml
-  when: cassandra_metrics
-
-- name: Start configured Cassandra
-  docker_container:
-    name: cassandra
-    image: "cassandra:{{ cassandra_version }}"
-    state: started
-    restart_policy: unless-stopped
-    network_mode: host
-#    ports:
-#      - "7000:7000"
-#      - "9042:9042"
-    volumes:
-      - "cass-data-dir:{{ cassandra_docker_data_dir }}:rw"
-      - "cass-root-dir:{{ cassandra_docker_root_dir }}:rw"
-      - "cass-java-dir:{{ cassandra_docker_java_dir }}:rw"
-
-
-- include: authentication.yml
-  run_once: true
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
-  when:
-    - cassandra_cluster_username != None
-    - cassandra_cluster_password != None
+- include: tests.yml
+  when: cassandra_tests
