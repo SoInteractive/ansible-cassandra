@@ -6,5 +6,36 @@
     port: 9042
 
 - name: Check login with default user
-  command: docker run -t cassandra:{{ cassandra_version }} sh -c 'cqlsh -e exit -u cassandra -p cassandra {{ cassandra_address }}'
+  command: cqlsh -e exit {{ cassandra_address }}
+  changed_when: false
+
+- name: Test cluster - create test keyspace on node1
+  command: "cqlsh -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" {{ cassandra_address }}"
+  when: inventory_hostname == groups[cassandra_hosts_group][0]
+  changed_when: false
+
+- block:
+  - name: Test cluster - check if keyspace exists on node2
+    command: "cqlsh -e \"DESCRIBE test_keyspace;\" {{ cassandra_address }}"
+    when: inventory_hostname == groups[cassandra_hosts_group][1]
+    changed_when: false
+
+  - name: Test cluster - drop test keyspace on node3
+    command: "cqlsh -e \"DROP KEYSPACE test_keyspace;\" {{ cassandra_address }}"
+    when: inventory_hostname == groups[cassandra_hosts_group][2]
+    changed_when: false
+  when: groups[cassandra_hosts_group] | length > 2
+
+- block:
+  - name: Test cluster - drop test keyspace on node2 if two nodes
+    command: "cqlsh -e \"DROP KEYSPACE test_keyspace;\" {{ cassandra_address }}"
+    when: inventory_hostname == groups[cassandra_hosts_group][1]
+    changed_when: false
+  when: groups[cassandra_hosts_group] | length == 2
+
+- name: Test cluster - drop test keyspace on node2 if single node
+  command: "cqlsh -e \"DROP KEYSPACE test_keyspace;\" {{ cassandra_address }}"
+  when:
+    - inventory_hostname == groups[cassandra_hosts_group][0]
+    - groups[cassandra_hosts_group] | length == 1
   changed_when: false
