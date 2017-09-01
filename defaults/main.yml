@@ -4,10 +4,11 @@ cassandra_data_dir: /opt/cassandra/data
 cassandra_docker_data_dir: /var/lib/cassandra
 cassandra_version: 2.2
 
-#tests
-cassandra_tests: True
-
 #config
 cassandra_cluster_name: "Cassandra Cluster"
 cassandra_hosts_group: "cassandra"
 cassandra_interface: "{{ ansible_default_ipv4.interface }}"
+
+#TODO
+#cassandra_username:
+#cassandra_password:

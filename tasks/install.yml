@@ -1,4 +1,20 @@
 ---
+
+- name: Install dependencies
+  package:
+    name: python-pip
+    state: present
+
+- name: Install pip dependencies
+  pip:
+    name: docker-py
+
+- name: Install cqlsh on first node
+  pip:
+    name: cqlsh
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  run_once: true
+
 - name: Make sure data dir exist
   file:
     path: "{{ cassandra_data_dir }}"
@@ -25,3 +41,5 @@
     env:
       CASSANDRA_SEEDS: "{% for host in groups[cassandra_hosts_group] %}{{ hostvars[host]['cassandra_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
       CASSANDRA_BROADCAST_ADDRESS: "{{ cassandra_address }}"
+      CASSANDRA_CLUSTER_NAME: "{{ cassandra_cluster_name }}"
+  notify: tests

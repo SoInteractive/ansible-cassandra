@@ -4,7 +4,9 @@
     cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
   when: cassandra_address is undefined
 
-- include: install.yml
+- name: Check if cluster has odd number of hosts
+  fail:
+    msg: "The number of hosts in inventory MUST NOT be even"
+  when: groups[cassandra_hosts_group] | length is even
 
-- include: tests.yml
-  when: cassandra_tests
+- include: install.yml
