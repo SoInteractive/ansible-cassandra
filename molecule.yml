@@ -1,13 +1,28 @@
 ---
 ansible:
   playbook: tests/playbook.yml
+#  verbose: vvv
 driver:
   name: docker
 verifier:
   name: testinfra
 docker:
   containers:
-    - name: cassandra-xenial
-      image: solita/ubuntu-systemd
-      image_version: 16.04
-      privileged: true
+  - name: cassandra-node01
+    ansible_groups:
+      - cassandra
+    image: jpetazzo/dind
+    image_version: latest
+    privileged: True
+  - name: cassandra-node02
+    ansible_groups:
+      - cassandra
+    image: jpetazzo/dind
+    image_version: latest
+    privileged: True
+  - name: cassandra-node03
+    ansible_groups:
+      - cassandra
+    image: jpetazzo/dind
+    image_version: latest
+    privileged: True

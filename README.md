@@ -7,6 +7,11 @@ Ansible Role: cassandra
 
 This role installs Cassandra cluster and metrics exporter
 
+Requirements
+------------
+
+Docker must be installed on host system. Due to test requirements those few lines have been commented out from meta/main.yml.
+
 Example usage
 -------------
 
@@ -15,7 +20,6 @@ Use it in a playbook as follows:
 - hosts: cassandra
   become: true
   roles:
-    - SoInteractive.java
     - SoInteractive.cassandra
 ```
 

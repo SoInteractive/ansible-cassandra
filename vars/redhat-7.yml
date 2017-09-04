@@ -1,4 +1,0 @@
----
-cassandra_dependencies: []
-
-cassandra_default_package: "cassandra30"

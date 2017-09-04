@@ -18,12 +18,6 @@ pipeline {
     GIT_URL = sh( script: "git config --get remote.origin.url", returnStdout: true ).trim()
   }
   stages {
-    stage('Download requirements'){
-      steps {
-        sh 'mkdir -p .molecule/roles'
-        sh 'ansible-galaxy install -r requirements.yml -p .molecule/roles'
-      }
-    }
     stage('Check syntax') {
       steps {
         sh 'molecule syntax'

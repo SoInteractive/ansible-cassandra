@@ -1,16 +1,15 @@
 ---
-- hosts: all
+- hosts: cassandra
   tasks:
-    - name: install testing suite
-      package:
-        name: "{{ item }}"
-        state: present
-      with_items:
-        - iproute
-        - net-tools
+  - name: Install dependencies
+    package:
+      name: python-pip
+      state: present
 
-- hosts: all
+  - name: Install pip dependencies
+    pip:
+      name: docker-py
+
+- hosts: cassandra
   roles:
     - cassandra
-  vars:
-    cassandra_hosts_group: all

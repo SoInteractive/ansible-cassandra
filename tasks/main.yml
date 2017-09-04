@@ -1,35 +1,12 @@
 ---
-- name: Gather variables for each operating system
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_version | lower }}.yml"
-    - "{{ ansible_distribution | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-    - "{{ ansible_os_family | lower }}-{{ ansible_distribution_major_version | lower }}.yml"
-    - "{{ ansible_distribution | lower }}.yml"
-    - "{{ ansible_os_family | lower }}.yml"
-  tags:
-    - always
-
 - name: Set cassandra address
   set_fact:
     cassandra_address: "{{ hostvars[inventory_hostname]['ansible_' + cassandra_interface]['ipv4']['address'] }}"
   when: cassandra_address is undefined
 
+- name: Check if cluster has odd number of hosts
+  fail:
+    msg: "The number of hosts in inventory MUST NOT be even"
+  when: groups[cassandra_hosts_group] | length is even
+
 - include: install.yml
-
-- name: Ensure cassandra is enabled
-  service:
-    name: cassandra
-    enabled: yes
-
-- include: configure.yml
-
-- include: authentication.yml
-  run_once: true
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
-  when:
-    - cassandra_cluster_username != None
-    - cassandra_cluster_password != None
-
-- include: metrics.yml
-  when: cassandra_metrics

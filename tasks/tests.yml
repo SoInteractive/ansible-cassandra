@@ -1,0 +1,35 @@
+---
+- name: Tests
+  block:
+  - name: Test if cassandra is up
+    wait_for:
+      host: "{{ cassandra_address }}"
+      port: 9042
+
+#TODO
+#  - name: Check login with default user
+#    command: cqlsh -e exit -u cassandra -p cassandra {{ cassandra_address }}
+#    fail_when: command_result.stderr != 'FAILED'
+#    when:
+#      - cassandra_username != None
+#      - cassandra_password != None
+
+  - name: Test cluster - create test keyspace on node1
+    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" {{ cassandra_address }}"
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    run_once: true
+    changed_when: false
+
+  - name: Test cluster - check if keyspace exists on other nodes
+    command: "cqlsh --cqlversion=3.4.0 -e \"DESCRIBE test_keyspace;\" {{ cassandra_address }}"
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    changed_when: false
+
+  - name: Test cluster - drop test keyspace on node1
+    command: "cqlsh --cqlversion=3.4.0 -e \"DROP KEYSPACE test_keyspace;\" {{ cassandra_address }}"
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    run_once: true
+    changed_when: false
+
+#TODO
+#test other users
