@@ -15,18 +15,18 @@
 #      - cassandra_password != None
 
   - name: Test cluster - create test keyspace on node1
-    command: "cqlsh -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" {{ cassandra_address }}"
     delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     run_once: true
     changed_when: false
 
   - name: Test cluster - check if keyspace exists on other nodes
-    command: "cqlsh -e \"DESCRIBE test_keyspace;\" {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e \"DESCRIBE test_keyspace;\" {{ cassandra_address }}"
     delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     changed_when: false
 
   - name: Test cluster - drop test keyspace on node1
-    command: "cqlsh -e \"DROP KEYSPACE test_keyspace;\" {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e \"DROP KEYSPACE test_keyspace;\" {{ cassandra_address }}"
     delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     run_once: true
     changed_when: false

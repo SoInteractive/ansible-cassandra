@@ -1,7 +1,7 @@
 ---
 #docker conf
 cassandra_data_dir: /opt/cassandra/data
-cassandra_version: 2.2
+cassandra_version: 3.0
 
 #config
 cassandra_cluster_name: "Cassandra Cluster"
