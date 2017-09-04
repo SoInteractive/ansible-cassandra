@@ -4,10 +4,8 @@
   package:
     name: python-pip
     state: present
-
-- name: Install pip dependencies
-  pip:
-    name: docker-py
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  run_once: true
 
 - name: Install cqlsh on first node
   pip:
