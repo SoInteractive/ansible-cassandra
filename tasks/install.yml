@@ -19,13 +19,6 @@
   file:
     path: "{{ cassandra_data_dir }}"
     state: directory
-    group: docker
-    mode: 0777
-
-- name: Make sure that docker is installed and running
-  service:
-    name: docker
-    state: started
 
 - name: Download and run Cassandra instance
   docker_container:
@@ -37,7 +30,7 @@
       - "7000:7000"
       - "9042:9042"
     volumes:
-      - "{{ cassandra_data_dir }}:{{ cassandra_docker_data_dir }}:rw"
+      - "{{ cassandra_data_dir }}:/var/lib/cassandra:rw"
     env:
       CASSANDRA_SEEDS: "{% for host in groups[cassandra_hosts_group] %}{{ hostvars[host]['cassandra_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
       CASSANDRA_BROADCAST_ADDRESS: "{{ cassandra_address }}"

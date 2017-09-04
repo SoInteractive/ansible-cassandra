@@ -10,12 +10,7 @@ This role installs Cassandra cluster and metrics exporter
 Requirements
 ------------
 
-Docker must be installed on host system. Due to test requirements those few lines have been commented out from meta/main.yml and requirements.yml.
-
-To perform full installation uncomment those lines and run:
-```
-ansible-galaxy install -r requirements.yml -p ./molecule/roles/.
-```
+Docker must be installed on host system. Due to test requirements those few lines have been commented out from meta/main.yml.
 
 Example usage
 -------------

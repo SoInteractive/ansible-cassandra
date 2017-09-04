@@ -1,17 +1,4 @@
 ---
 - hosts: cassandra
-  tasks:
-    - name: Install dependencies
-      package:
-        name: python-pip
-        state: present
-
-    - name: Install pip dependencies
-      pip:
-        name: docker-py
-
-- hosts: cassandra
   roles:
     - cassandra
-  vars:
-    cassandra_hosts_group: cassandra

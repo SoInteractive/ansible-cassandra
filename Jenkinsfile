@@ -36,6 +36,7 @@ pipeline {
     stage('Run Tests'){
       steps {
         sh 'molecule idempotence'
+        sh 'molecule verify'
       }
     }
     stage('Add new tag and push it to repository'){
