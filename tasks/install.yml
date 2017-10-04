@@ -1,36 +1,94 @@
 ---
+# Need to add ajenti repo for python-support package
+- name: Add ajenti repo key for ubuntu 16.04
+  apt_key:
+    url: "http://repo.ajenti.org/debian/key"
+    state: present
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
+  when: ansible_distribution_release  == "xenial"
+
+- name: Add ajenti repo key for ubuntu 16.04
+  apt_repository:
+    repo: "deb http://repo.ajenti.org/ng/debian main main ubuntu"
+    state: present
+  when: ansible_distribution_release  == "xenial"
 
 - name: Install dependencies
   package:
-    name: python-pip
+    name: "{{ item }}"
     state: present
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
-  run_once: true
+  with_items: "{{ cassandra_dependencies }}"
 
-- name: Install cqlsh on first node
+- name: Install cassandra-driver
   pip:
-    name: cqlsh
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
-  run_once: true
+    name: cassandra-driver
+    state: present
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
 
-- name: Make sure data dir exist
-  file:
-    path: "{{ cassandra_data_dir }}"
-    state: directory
+- name: Add repository GPG key [Debian/Ubuntu]
+  apt_key:
+    url: "http://debian.datastax.com/debian/repo_key"
+    state: present
+  environment:
+    http_proxy: "{{ http_proxy | default('') }}"
+    https_proxy: "{{ https_proxy | default('') }}"
+  when: ansible_pkg_mgr == 'apt'
 
-- name: Download and run Cassandra instance
-  docker_container:
-    name: cassandra
-    image: "cassandra:{{ cassandra_version }}"
-    state: started
-    restart_policy: unless-stopped
-    ports:
-      - "7000:7000"
-      - "9042:9042"
-    volumes:
-      - "{{ cassandra_data_dir }}:/var/lib/cassandra:rw"
-    env:
-      CASSANDRA_SEEDS: "{% for host in groups[cassandra_hosts_group] %}{{ hostvars[host]['cassandra_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
-      CASSANDRA_BROADCAST_ADDRESS: "{{ cassandra_address }}"
-      CASSANDRA_CLUSTER_NAME: "{{ cassandra_cluster_name }}"
-  notify: tests
+- name: Add cassandra repository [Debian/Ubuntu]
+  apt_repository:
+    repo: "deb http://debian.datastax.com/community stable main"
+    state: present
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Add cassandra repository [RedHat]
+  template:
+    src: datastax.repo
+    dest: /etc/yum.repos.d/datastax.repo
+  when: ansible_pkg_mgr == 'yum'
+
+- name: Set cassandra package name
+  set_fact:
+    cassandra_package: "{{ cassandra_default_package }}"
+  when: cassandra_package == None
+
+- name: Check if default cassandra data dir exists
+  stat:
+    path: /var/lib/cassandra
+  register: data_dir
+
+- name: Install Cassandra
+  package:
+    name: "{{ cassandra_package }}"
+    state: present
+  notify: restart cassandra
+  register: install_package
+
+- block:
+  - name: Wait a bit
+    pause:
+      seconds: 10
+
+  - name: Stop cassandra
+    service:
+      name: cassandra
+      state: stopped
+
+  - name: Remove default directory
+    command: "rm -rf /var/lib/cassandra"
+    args:
+      removes: /var/lib/cassandra
+    tags: skip_ansible_lint
+
+  - name: Create default cassandra directory
+    file:
+      path: /var/lib/cassandra
+      state: directory
+      owner: cassandra
+      group: cassandra
+  when:
+  - install_package|changed
+  - not data_dir.stat.exists

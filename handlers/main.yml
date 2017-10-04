@@ -1,3 +1,5 @@
 ---
-- name: tests
-  include: tests.yml
+- name: restart cassandra
+  service:
+    name: cassandra
+    state: restarted

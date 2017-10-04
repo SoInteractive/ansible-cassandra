@@ -1,0 +1,32 @@
+---
+- name: Wait for cassandra to start
+  wait_for:
+    host: "{{ cassandra_address }}"
+    port: "{{ cassandra_port }}"
+
+- name: Test connection with default user
+  command: "cqlsh -e 'SELECT now() FROM system.local;' -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }} {{ cassandra_port }}"
+  changed_when: false
+  ignore_errors: true
+  register: checkstatus
+
+- debug:
+    var: checkstatus
+
+- block:
+  - name: Add user
+    command: "cqlsh -e \"CREATE USER IF NOT EXISTS {{ cassandra_cluster_username }} WITH PASSWORD '{{ cassandra_cluster_password }}' SUPERUSER;\" -u cassandra -p cassandra {{ cassandra_address }} {{ cassandra_port }}"
+    changed_when: false
+
+  - name: Check connection with new user
+    command: "cqlsh -e 'SELECT now() FROM system.local;' -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }} {{ cassandra_port }}"
+    changed_when: false
+
+  - name: Drop default user
+    command: "cqlsh -e \"DROP USER IF EXISTS cassandra ;\" -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }} {{ cassandra_port }}"
+    changed_when: false
+
+  - name: Proper replication of users collection
+    command: "cqlsh -e \"ALTER KEYSPACE system_auth WITH REPLICATION = { 'class':'SimpleStrategy', 'replication_factor':{{ groups[cassandra_hosts_group] | length }} } ;\" -u {{ cassandra_cluster_username }} -p {{ cassandra_cluster_password }} {{ cassandra_address }} {{ cassandra_port }}"
+    changed_when: false
+  when: checkstatus.stderr != ""
