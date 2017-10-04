@@ -12,7 +12,7 @@
 
 - block:
   - name: Add user
-    command: "cqlsh -e \"CREATE USER IF NOT EXISTS {{ cassandra_cluster_username }} WITH PASSWORD '{{ cassandra_cluster_password }}' SUPERUSER;\" -u cassandra -p cassandra {{ cassandra_address }} {{ cassandra_port }}"
+    command: "cqlsh -e \"CREATE USER {{ cassandra_cluster_username }} WITH PASSWORD '{{ cassandra_cluster_password }}' SUPERUSER;\" -u cassandra -p cassandra {{ cassandra_address }} {{ cassandra_port }}"
     changed_when: false
 
   - name: Check connection with new user
