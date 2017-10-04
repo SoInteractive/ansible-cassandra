@@ -10,9 +10,6 @@
   ignore_errors: true
   register: checkstatus
 
-- debug:
-    var: checkstatus
-
 - block:
   - name: Add user
     command: "cqlsh -e \"CREATE USER IF NOT EXISTS {{ cassandra_cluster_username }} WITH PASSWORD '{{ cassandra_cluster_password }}' SUPERUSER;\" -u cassandra -p cassandra {{ cassandra_address }} {{ cassandra_port }}"
