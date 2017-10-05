@@ -1,4 +1,1 @@
-[cassandra]
-cassandra-node01
-cassandra-node02
-cassandra-node03
+localhost

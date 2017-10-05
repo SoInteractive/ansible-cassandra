@@ -1,0 +1,15 @@
+---
+- name: download jmx_exporter binary to local folder
+  become: no
+  get_url:
+    url: "{{ cassandra_jmx_exporter_url }}"
+    dest: "/tmp/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+    validate_certs: no
+  run_once: true
+  delegate_to: localhost
+
+- name: propagate jmx_exporter binary
+  copy:
+    src: "/tmp/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+    dest: "/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar"
+    force: no

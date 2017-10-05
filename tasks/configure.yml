@@ -1,0 +1,48 @@
+---
+- name: Ensure data dirs exist
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: cassandra
+    group: cassandra
+  with_items: "{{ cassandra_data_dirs }}"
+
+- name: Set CQLSH env variables
+  lineinfile:
+    dest: /etc/environment
+    line: "CQLSH_NO_BUNDLED=true"
+    regexp: ".*CQLSH_NO_BUNDLED.*$"
+    state: present
+
+- block:
+  - name: Stop cassandra
+    service:
+      name: cassandra
+      state: stopped
+
+  - name: Remove test cluster
+    file:
+      path: /var/lib/cassandra/data/system
+      state: absent
+
+  - name: Start cassandra
+    service:
+      name: cassandra
+      state: started
+  when: cassandra_remove_test
+
+- name: Configure cassandra
+  template:
+    src: cassandra.yaml.j2
+    dest: "{{ cassandra_root_dir }}/cassandra.yaml"
+    owner: "root"
+    group: "root"
+    mode: 0644
+  notify: restart cassandra
+
+- name: Enable metrics
+  lineinfile:
+    dest: /etc/cassandra/cassandra-env.sh
+    line: JVM_OPTS="$JVM_OPTS -javaagent:/usr/share/java/jmx_prometheus_javaagent-{{ cassandra_jmx_exporter_version }}.jar={{ cassandra_jmx_exporter_port }}:{{ cassandra_root_dir }}/cassandra.yaml"
+  notify: restart cassandra
+  when: cassandra_metrics
