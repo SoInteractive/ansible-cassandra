@@ -1,0 +1,59 @@
+
+- name: Ensure that database is up
+  wait_for:
+    host: "{{ cassandra_address }}"
+    port: 9042
+
+- name: Test connection with new users
+  command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u {{ item.username }} -p {{ item.password }} {{ cassandra_address }}"
+  with_items:
+    - "{{ cassandra_users }}"
+  changed_when: false
+  ignore_errors: true
+  register: checkstatus
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  run_once: true
+
+- debug:
+    var: checkstatus
+
+- block:
+  - name: Add user
+    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE USER IF NOT EXISTS {{ item.username }} WITH PASSWORD '{{ item.password }}' SUPERUSER;\" -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+    with_items:
+      - "{{ cassandra_users }}"
+    changed_when: false
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    run_once: true
+
+  - name: Check connection with new user
+    command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u {{ item.username }} -p {{ item.password }} {{ cassandra_address }}"
+    with_items:
+      - "{{ cassandra_users }}"
+    changed_when: false
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    run_once: true
+
+  - name: Generate random password
+    shell: "date | sha256sum | head -c 32"
+    register: pass
+
+  - name: Alter default user
+    command: "cqlsh --cqlversion=3.4.0 -e \"ALTER USER {{ cassandra_default_username }} WITH PASSWORD '{{ pass.stdout }}'  ;\" -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+    changed_when: false
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    run_once: true
+
+  - name: Check if default user was deleted properly
+    command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+    register: status
+    failed_when: status.stderr == ""
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    run_once: true
+
+  - name: Proper replication of users collection
+    command: "cqlsh --cqlversion=3.4.0 -e \"ALTER KEYSPACE system_auth WITH REPLICATION = { 'class':'SimpleStrategy', 'replication_factor':{{ groups[cassandra_hosts_group] | length }} } ;\" -u {{ cassandra_users[0].username }} -p {{ cassandra_users[0].password }} {{ cassandra_address }}"
+    changed_when: false
+    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+    run_once: true
+  when: checkstatus.msg == "One or more items failed"

@@ -5,10 +5,12 @@
     package:
       name: python-pip
       state: present
+    retries: 5
 
   - name: Install pip dependencies
     pip:
       name: docker-py
+    retries: 5
 
 - hosts: cassandra
   roles:
