@@ -10,19 +10,25 @@ docker:
   containers:
   - name: cassandra-node01
     ansible_groups:
-      - cassandra
+      - cluster
     image: jpetazzo/dind
     image_version: latest
     privileged: True
   - name: cassandra-node02
     ansible_groups:
-      - cassandra
+      - cluster
     image: jpetazzo/dind
     image_version: latest
     privileged: True
   - name: cassandra-node03
     ansible_groups:
-      - cassandra
+      - cluster
+    image: jpetazzo/dind
+    image_version: latest
+    privileged: True
+  - name: cassandra-single
+    ansible_groups:
+      - single-container
     image: jpetazzo/dind
     image_version: latest
     privileged: True

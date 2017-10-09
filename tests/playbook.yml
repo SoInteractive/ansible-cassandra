@@ -1,15 +1,25 @@
 ---
-- hosts: cassandra
+- hosts: all
   tasks:
   - name: Install dependencies
     package:
       name: python-pip
       state: present
+    retries: 5
 
   - name: Install pip dependencies
     pip:
       name: docker-py
+    retries: 5
 
-- hosts: cassandra
+- hosts: cluster
   roles:
     - cassandra
+  vars:
+    cassandra_hosts_group: cluster
+
+- hosts: single-container
+  roles:
+    - cassandra
+  vars:
+    cassandra_hosts_group: single-container
