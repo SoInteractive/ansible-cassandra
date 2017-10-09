@@ -1,0 +1,9 @@
+[all]
+cassandra-node01 ansible_connection=docker
+cassandra-node02 ansible_connection=docker
+cassandra-node03 ansible_connection=docker
+
+[cassandra]
+cassandra-node01
+cassandra-node02
+cassandra-node03

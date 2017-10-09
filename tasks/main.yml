@@ -11,6 +11,8 @@
 
 - include: install.yml
 
+- meta: flush_handlers
+
 - include: auth.yml
   when:
     - cassandra_auth

@@ -61,4 +61,4 @@
     volumes:
       - "{{ cassandra_data_dir }}:/var/lib/cassandra:rw"
       - "{{ cassandra_config_dir }}/cassandra.yaml:/etc/cassandra/cassandra.yaml:ro"
-#  notify: tests
+  notify: tests
