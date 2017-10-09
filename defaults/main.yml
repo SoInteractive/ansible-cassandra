@@ -1,13 +1,29 @@
 ---
 #docker conf
 cassandra_data_dir: /opt/cassandra/data
+cassandra_config_dir: /opt/cassandra/conf
 cassandra_version: 3.0
+
+#cassandra conf
+cassandra_data_dirs:
+  - "/var/lib/cassandra/data"
+
+cassandra_commitlog_dir: "/var/lib/cassandra/commitlog"
+cassandra_saved_caches_dir: "/var/lib/cassandra/saved_caches"
 
 #config
 cassandra_cluster_name: "Cassandra Cluster"
 cassandra_hosts_group: "cassandra"
 cassandra_interface: "{{ ansible_default_ipv4.interface }}"
+cassandra_num_tokens: 256
 
 #TODO
-#cassandra_username:
-#cassandra_password:
+cassandra_system_user: cassandra
+cassandra_system_group: cassandra
+cassandra_default_username: cassandra
+cassandra_default_password: cassandra
+
+cassandra_auth: true
+cassandra_users:
+  - username: test
+    password: test
