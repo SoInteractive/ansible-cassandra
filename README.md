@@ -29,6 +29,4 @@ that can be overridden.
 TODO
 ----
 
-- Tests, tests, tests
-- Test clustering
-- Test credential changing
+- Replication factor in system_auth

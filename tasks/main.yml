@@ -10,3 +10,10 @@
   when: groups[cassandra_hosts_group] | length is even
 
 - include: install.yml
+
+- meta: flush_handlers
+
+- include: auth.yml
+  when:
+    - cassandra_auth
+    - cassandra_users | length > 0
