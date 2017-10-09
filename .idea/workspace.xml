@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="827239ab-4059-4b5e-be2a-245c70a94c33" name="Default" comment="workaround for system_auth replication factor">
+    <list default="true" id="827239ab-4059-4b5e-be2a-245c70a94c33" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.molecule/ansible_inventory" afterPath="$PROJECT_DIR$/.molecule/ansible_inventory" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/molecule.yml" afterPath="$PROJECT_DIR$/molecule.yml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/tests/playbook.yml" afterPath="$PROJECT_DIR$/tests/playbook.yml" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -391,7 +387,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507550437475</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="workaround for system_auth replication factor">
+      <created>1507552399110</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1507552399110</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="ToolWindowManager">
