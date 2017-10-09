@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="827239ab-4059-4b5e-be2a-245c70a94c33" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/" />
@@ -47,8 +48,18 @@
       <file leaf-file-name="tests.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tasks/tests.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
+            <state relative-caret-position="469">
               <caret line="30" column="23" lean-forward="true" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="5" column="15" lean-forward="true" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
               <folding />
             </state>
           </provider>
@@ -75,16 +86,6 @@
         </entry>
       </file>
       <file leaf-file-name="main.yml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/handlers/main.yml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="main.yml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tasks/main.yml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="306">
@@ -94,12 +95,12 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="README.md" pinned="false" current-in-tab="true">
+      <file leaf-file-name="README.md" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/README.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="422">
-                <caret line="31" column="35" lean-forward="true" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+              <first_editor relative-caret-position="459">
+                <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
                 <folding>
                   <marker date="1507550754634" expanded="true" signature="1124:1133" ph="cassandra" />
                   <marker date="1507550754634" expanded="true" signature="1144:1148" ph="true" />
@@ -158,6 +159,7 @@
         <option value="$PROJECT_DIR$/molecule.yml" />
         <option value="$PROJECT_DIR$/tasks/main.yml" />
         <option value="$PROJECT_DIR$/tests/playbook.yml" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -190,31 +192,6 @@
             <path>
               <item name="cassandra" type="b2602c69:ProjectViewProjectNode" />
               <item name="cassandra" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cassandra" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cassandra" type="462c0819:PsiDirectoryNode" />
-              <item name="defaults" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cassandra" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cassandra" type="462c0819:PsiDirectoryNode" />
-              <item name="handlers" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cassandra" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cassandra" type="462c0819:PsiDirectoryNode" />
-              <item name="tasks" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cassandra" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cassandra" type="462c0819:PsiDirectoryNode" />
-              <item name="templates" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cassandra" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cassandra" type="462c0819:PsiDirectoryNode" />
-              <item name="tests" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -394,7 +371,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507552399110</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="user support with full tests">
+      <created>1507552443886</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1507552443886</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -441,7 +425,8 @@
     <MESSAGE value="works! :)" />
     <MESSAGE value="tests" />
     <MESSAGE value="workaround for system_auth replication factor" />
-    <option name="LAST_COMMIT_MESSAGE" value="workaround for system_auth replication factor" />
+    <MESSAGE value="user support with full tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="user support with full tests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -496,14 +481,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tasks/main.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="34" lean-forward="true" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/playbook.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="17">
@@ -520,6 +497,30 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="459">
+            <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <folding>
+              <marker date="1507550754634" expanded="true" signature="1124:1133" ph="cassandra" />
+              <marker date="1507550754634" expanded="true" signature="1144:1148" ph="true" />
+              <marker date="1507550754634" expanded="true" signature="1151:1187" ph="roles: &lt;1 item&gt;" />
+              <marker date="1507550754634" expanded="true" signature="1164:1187" ph="SoInterac….cassandra" />
+            </folding>
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tasks/main.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="34" lean-forward="true" selection-start-line="18" selection-start-column="34" selection-end-line="18" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tasks/auth.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="44">
@@ -530,25 +531,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tasks/tests.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
+        <state relative-caret-position="469">
           <caret line="30" column="23" lean-forward="true" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="422">
-            <caret line="31" column="35" lean-forward="true" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
-            <folding>
-              <marker date="1507550754634" expanded="true" signature="1124:1133" ph="cassandra" />
-              <marker date="1507550754634" expanded="true" signature="1144:1148" ph="true" />
-              <marker date="1507550754634" expanded="true" signature="1151:1187" ph="roles: &lt;1 item&gt;" />
-              <marker date="1507550754634" expanded="true" signature="1164:1187" ph="SoInterac….cassandra" />
-            </folding>
-          </first_editor>
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="15" lean-forward="true" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+          <folding />
         </state>
       </provider>
     </entry>
