@@ -12,4 +12,4 @@
 
 - hosts: cassandra
   roles:
-    - cassandra
+    - ansible-cassandra
