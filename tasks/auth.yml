@@ -16,7 +16,7 @@
   command: "cqlsh --cqlversion=3.4.0 -e \"ALTER USER cassandra WITH PASSWORD '{{ cassandra_alter_password }}'  ;\" -u cassandra -p cassandra {{ cassandra_address }}"
   delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
   changed_when: false
-  when: checkstatus | changed
+  when: checkstatus.results[0].stderr == ""
 
 - name: Test connection with new password
   command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u cassandra -p {{ cassandra_alter_password }} {{ cassandra_address }}"
