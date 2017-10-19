@@ -10,7 +10,7 @@
   run_once: true
   changed_when: false
   register: status
-  until: status.result[0].rc == 0
+  until: status.results[0].rc == 0
   retries: 5
 
 - block:
