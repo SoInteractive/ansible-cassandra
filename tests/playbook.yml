@@ -14,12 +14,12 @@
 
 - hosts: cluster
   roles:
-    - cassandra
+    - ansible-cassandra
   vars:
     cassandra_hosts_group: cluster
 
 - hosts: single-container
   roles:
-    - cassandra
+    - ansible-cassandra
   vars:
     cassandra_hosts_group: single-container
