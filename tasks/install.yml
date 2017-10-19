@@ -13,24 +13,52 @@
   delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
   run_once: true
 
-- name: Make sure data dir exist
+- name: Ensure cassandra system group exists
+  group:
+    name: cassandra
+    state: present
+    system: yes
+
+- name: Ensure cassandra system user exists
+  user:
+    name: "{{ cassandra_system_user }}"
+    state: present
+    shell: /usr/sbin/nologin
+    system: yes
+    group: "{{ cassandra_system_group }}"
+    createhome: no
+
+- name: Make sure cassandra dirs exist
   file:
-    path: "{{ cassandra_data_dir }}"
+    path: "{{ item }}"
     state: directory
+    owner: "{{ cassandra_system_user }}"
+    group: "{{ cassandra_system_group }}"
+    mode: 0644
+  with_items:
+    - "{{ cassandra_data_dir }}"
+    - "{{ cassandra_config_dir }}"
+
+- name: Configure cassandra
+  template:
+    src: cassandra.yaml.j2
+    dest: "{{ cassandra_config_dir }}/cassandra.yaml"
+    owner: "{{ cassandra_system_user }}"
+    group: "{{ cassandra_system_group }}"
+    mode: 0644
 
 - name: Download and run Cassandra instance
   docker_container:
     name: cassandra
     image: "cassandra:{{ cassandra_version }}"
     state: started
+    network_mode: host
     restart_policy: unless-stopped
+    entrypoint: "cassandra -f"
     ports:
       - "7000:7000"
       - "9042:9042"
     volumes:
       - "{{ cassandra_data_dir }}:/var/lib/cassandra:rw"
-    env:
-      CASSANDRA_SEEDS: "{% for host in groups[cassandra_hosts_group] %}{{ hostvars[host]['cassandra_address'] }}{% if not loop.last %},{% endif %}{% endfor %}"
-      CASSANDRA_BROADCAST_ADDRESS: "{{ cassandra_address }}"
-      CASSANDRA_CLUSTER_NAME: "{{ cassandra_cluster_name }}"
-  notify: tests
+      - "{{ cassandra_config_dir }}/cassandra.yaml:/etc/cassandra/cassandra.yaml:ro"
+  register: container

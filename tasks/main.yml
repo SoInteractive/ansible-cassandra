@@ -9,4 +9,16 @@
     msg: "The number of hosts in inventory MUST NOT be even"
   when: groups[cassandra_hosts_group] | length is even
 
+- name: Check if cassandra_alter_password variable is set to perform configuration
+  fail:
+    msg: "cassandra_alter_password must be set!"
+  when:
+    - cassandra_alter_password == ""
+
 - include: install.yml
+
+- include: tests.yml
+  when:
+    - container.changed
+
+- include: auth.yml

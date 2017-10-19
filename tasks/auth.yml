@@ -1,0 +1,76 @@
+
+- name: Ensure that database is up
+  wait_for:
+    host: "{{ cassandra_address }}"
+    port: 9042
+
+- name: Test connection with default user
+  command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u cassandra -p cassandra {{ cassandra_address }}"
+  with_items:
+    - "{{ cassandra_users }}"
+  changed_when: false
+  ignore_errors: true
+  register: checkstatus
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+
+- name: Alter default user
+  command: "cqlsh --cqlversion=3.4.0 -e \"ALTER USER cassandra WITH PASSWORD '{{ cassandra_alter_password }}'  ;\" -u cassandra -p cassandra {{ cassandra_address }}"
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  changed_when: false
+  when: checkstatus.results[0].stderr == ""
+
+- name: Test connection with new password
+  command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u cassandra -p {{ cassandra_alter_password }} {{ cassandra_address }}"
+  changed_when: false
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+
+#- block:
+#  - name: Add superuser
+#    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE USER IF NOT EXISTS {{ cassandra_superuser_username }} WITH PASSWORD '{{ cassandra_superuser_password }}' SUPERUSER;\" -u cassandra -p cassandra {{ cassandra_address }}"
+#    changed_when: false
+#    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+#
+#  - name: Check connection with new superuser
+#    command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u {{ cassandra_superuser_username }} -p {{ cassandra_superuser_password }} {{ cassandra_address }}"
+#    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+#
+#  - name: Alter default user
+#    command: "cqlsh --cqlversion=3.4.0 -e \"ALTER USER cassandra WITH PASSWORD '{{ cassandra_alter_password }}'  ;\" -u cassandra -p cassandra {{ cassandra_address }}"
+#    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+#
+#  - name: Check if default user was deleted properly
+#    command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u cassandra -p cassandra {{ cassandra_address }}"
+#    register: status
+#    failed_when: status.stderr == ""
+#    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+#  when:
+#    - checkstatus | changed
+#
+#
+#- block:
+#  - name: Add users
+#    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE USER IF NOT EXISTS {{ item.username }} WITH PASSWORD '{{ item.password }}' SUPERUSER;\" -u {{ cassandra_superuser_username }} -p {{ cassandra_superuser_password }} {{ cassandra_address }}"
+#    with_items:
+#      - "{{ cassandra_users }}"
+#    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+##    run_once: true
+#
+#  - name: Check connection with new user
+#    command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u {{ item.username }} -p {{ item.password }} {{ cassandra_address }}"
+#    with_items:
+#      - "{{ cassandra_users }}"
+#    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+#  when:
+#    - cassandra_users | length > 0
+#
+##TODO
+##  - name: Proper replication of users collection
+###    command: "cqlsh --cqlversion=3.4.0 -e \"ALTER KEYSPACE system_auth WITH REPLICATION = { 'class':'SimpleStrategy', 'replication_factor':{{ groups[cassandra_hosts_group] | length }} } ;\" -u {{ cassandra_users[0].username }} -p {{ cassandra_users[0].password }} {{ cassandra_address }}"
+##    command: "cqlsh --cqlversion=3.4.0 -e \"ALTER KEYSPACE system_auth WITH REPLICATION = { 'class':'SimpleStrategy', 'replication_factor':{{ groups[cassandra_hosts_group] | length }} } ;\" -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+##    changed_when: false
+##    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+##    run_once: true
+#
+##  - name: Pause for 30 seconds to be sure that system_auth has replicated correctly
+##    pause:
+##      seconds: 30
