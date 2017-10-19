@@ -14,7 +14,6 @@
     msg: "cassandra_alter_password must be set!"
   when:
     - cassandra_alter_password == ""
-    - cassandra_auth
 
 - include: install.yml
 
@@ -23,5 +22,3 @@
     - container.changed
 
 - include: auth.yml
-  when:
-    - cassandra_auth
