@@ -7,25 +7,25 @@
       port: 9042
 
   - name: Check login with default user
-    command: "cqlsh --cqlversion=3.4.0 -e exit -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e exit -u cassandra -p cassandra {{ cassandra_address }}"
     delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     run_once: true
     changed_when: false
     when: cassandra_auth == false
 
   - name: Test cluster - create test keyspace on node1
-    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" -u cassandra -p cassandra {{ cassandra_address }}"
     delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     run_once: true
     changed_when: false
 
   - name: Test cluster - check if keyspace exists on other nodes
-    command: "cqlsh --cqlversion=3.4.0 -e \"DESCRIBE test_keyspace;\" -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e \"DESCRIBE test_keyspace;\" -u cassandra -p cassandra {{ cassandra_address }}"
     delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     changed_when: false
 
   - name: Test cluster - drop test keyspace on node1
-    command: "cqlsh --cqlversion=3.4.0 -e \"DROP KEYSPACE test_keyspace;\" -u {{ cassandra_default_username }} -p {{ cassandra_default_password }} {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e \"DROP KEYSPACE test_keyspace;\" -u cassandra -p cassandra {{ cassandra_address }}"
     delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     run_once: true
     changed_when: false

@@ -25,7 +25,7 @@
     state: present
     shell: /usr/sbin/nologin
     system: yes
-    group: "{{ cassandra_system_group}}"
+    group: "{{ cassandra_system_group }}"
     createhome: no
 
 - name: Make sure cassandra dirs exist
@@ -61,4 +61,4 @@
     volumes:
       - "{{ cassandra_data_dir }}:/var/lib/cassandra:rw"
       - "{{ cassandra_config_dir }}/cassandra.yaml:/etc/cassandra/cassandra.yaml:ro"
-  notify: tests
+  register: container
