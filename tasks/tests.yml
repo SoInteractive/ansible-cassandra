@@ -1,33 +1,31 @@
 ---
-- name: Tests
-  block:
-  - name: Test if cassandra is up
-    wait_for:
-      host: "{{ cassandra_address }}"
-      port: 9042
+- name: Test if cassandra is up
+  wait_for:
+    host: "{{ cassandra_address }}"
+    port: 9042
 
-  - name: Check login with default user
-    command: "cqlsh --cqlversion=3.4.0 -e exit -u cassandra -p cassandra {{ cassandra_address }}"
-    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
-    run_once: true
-    changed_when: false
+- name: Check login with default user
+  command: "cqlsh --cqlversion=3.4.0 -e exit -u cassandra -p cassandra {{ cassandra_address }}"
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  run_once: true
+  changed_when: false
+  register: status
+  until: status.result[0].rc == 0
+  retries: 5
 
+- block:
   - name: Test cluster - create test keyspace on node1
     command: "cqlsh --cqlversion=3.4.0 -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" -u cassandra -p cassandra {{ cassandra_address }}"
-    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     run_once: true
     changed_when: false
-    when: groups[cassandra_hosts_group] | length > 1
 
   - name: Test cluster - check if keyspace exists on other nodes
     command: "cqlsh --cqlversion=3.4.0 -e \"DESCRIBE test_keyspace;\" -u cassandra -p cassandra {{ cassandra_address }}"
-    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     changed_when: false
-    when: groups[cassandra_hosts_group] | length > 1
 
   - name: Test cluster - drop test keyspace on node1
     command: "cqlsh --cqlversion=3.4.0 -e \"DROP KEYSPACE test_keyspace;\" -u cassandra -p cassandra {{ cassandra_address }}"
-    delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
     run_once: true
     changed_when: false
-    when: groups[cassandra_hosts_group] | length > 1
+  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  when: groups[cassandra_hosts_group] | length > 1
