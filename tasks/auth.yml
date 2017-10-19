@@ -8,6 +8,7 @@
   command: "cqlsh --cqlversion=3.4.0 -e 'SELECT now() FROM system.local;' -u cassandra -p cassandra {{ cassandra_address }}"
   with_items:
     - "{{ cassandra_users }}"
+  changed_when: false
   ignore_errors: true
   register: checkstatus
   delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
