@@ -13,10 +13,3 @@ cassandra_num_tokens: 256
 cassandra_system_user: cassandra
 cassandra_system_group: cassandra
 cassandra_alter_password: "pass"
-
-#cassandra_superuser_username: testsuperuser
-#cassandra_superuser_password: testsuperpassword
-
-cassandra_users:
-  - username: test
-    password: test
