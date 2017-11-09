@@ -49,7 +49,7 @@
       - "9042:9042"
     volumes:
       - cassandra_data_dir:/var/lib/cassandra:rw
-      - cassandra_config_dir:/etc/cassandra:ro
+      - cassandra_config_dir:/etc/cassandra:rw
 
 - name: Copy conf files to container
   command: docker cp /tmp/cassandra.yaml cassandra:/etc/cassandra/cassandra.yaml
@@ -68,5 +68,5 @@
       - "9042:9042"
     volumes:
       - cassandra_data_dir:/var/lib/cassandra:rw
-      - cassandra_config_dir:/etc/cassandra:ro
+      - cassandra_config_dir:/etc/cassandra:rw
   register: container
