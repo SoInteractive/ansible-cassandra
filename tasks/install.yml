@@ -28,24 +28,32 @@
     group: "{{ cassandra_system_group }}"
     createhome: no
 
-- name: Make sure cassandra dirs exist
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: "{{ cassandra_system_user }}"
-    group: "{{ cassandra_system_group }}"
-    mode: 0644
-  with_items:
-    - "{{ cassandra_data_dir }}"
-    - "{{ cassandra_config_dir }}"
-
 - name: Configure cassandra
   template:
     src: cassandra.yaml.j2
-    dest: "{{ cassandra_config_dir }}/cassandra.yaml"
+    dest: /tmp/cassandra.yaml
     owner: "{{ cassandra_system_user }}"
     group: "{{ cassandra_system_group }}"
     mode: 0644
+
+- name: Download Cassandra instance
+  docker_container:
+    name: cassandra
+    image: "cassandra:{{ cassandra_version }}"
+    state: present
+    network_mode: host
+    restart_policy: unless-stopped
+    entrypoint: "cassandra -f"
+    ports:
+      - "7000:7000"
+      - "9042:9042"
+    volumes:
+      - cassandra_data_dir:/var/lib/cassandra:rw
+      - cassandra_config_dir:/etc/cassandra:rw
+
+- name: Copy conf files to container
+  command: docker cp /tmp/cassandra.yaml cassandra:/etc/cassandra/cassandra.yaml
+  changed_when: false
 
 - name: Download and run Cassandra instance
   docker_container:
@@ -59,6 +67,6 @@
       - "7000:7000"
       - "9042:9042"
     volumes:
-      - "{{ cassandra_data_dir }}:/var/lib/cassandra:rw"
-      - "{{ cassandra_config_dir }}/cassandra.yaml:/etc/cassandra/cassandra.yaml:ro"
+      - cassandra_data_dir:/var/lib/cassandra:rw
+      - cassandra_config_dir:/etc/cassandra:rw
   register: container
