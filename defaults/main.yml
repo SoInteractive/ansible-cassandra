@@ -1,7 +1,7 @@
 ---
 #docker conf
-cassandra_data_dir: /opt/cassandra/data
-cassandra_config_dir: /opt/cassandra/conf
+#cassandra_data_dir: /opt/cassandra/data
+#cassandra_config_dir: /opt/cassandra/conf
 cassandra_version: 3.0
 
 #config
