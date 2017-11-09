@@ -52,7 +52,7 @@
       - cassandra_config_dir:/etc/cassandra:ro
 
 - name: Copy conf files to container
-  command: docker cp /tmp/cassandra.yml cassandra:/etc/cassandra/cassandra.yaml
+  command: docker cp /tmp/cassandra.yaml cassandra:/etc/cassandra/cassandra.yaml
   changed_when: false
 
 - name: Download and run Cassandra instance
