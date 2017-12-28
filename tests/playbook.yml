@@ -19,15 +19,8 @@
       name: docker-py
     retries: 5
 
-- hosts: single-container
+- hosts: all
   roles:
     - ansible-cassandra
   vars:
-    cassandra_hosts_group: single-container
     cassandra_alter_password: "testpassword"
-
-#- hosts: cluster
-#  roles:
-#    - ansible-cassandra
-#  vars:
-#    cassandra_hosts_group: cluster
