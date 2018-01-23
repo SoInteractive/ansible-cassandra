@@ -59,6 +59,8 @@
   docker_container:
     name: cassandra
     image: "cassandra:{{ cassandra_version }}"
+    labels:
+      namespace: database
     state: started
     network_mode: host
     restart_policy: unless-stopped
