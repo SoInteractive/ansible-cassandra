@@ -6,7 +6,7 @@
 
 - name: Check login with default user
   command: "cqlsh --cqlversion=3.4.0 -e exit -u cassandra -p cassandra {{ cassandra_address }}"
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  delegate_to: "{{ ansible_play_hosts[0] }}"
   run_once: true
   changed_when: false
   register: status
@@ -18,7 +18,7 @@
 
 - block:
   - name: Test cluster - create test keyspace on node1
-    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ groups[cassandra_hosts_group] | length }} };\" -u cassandra -p cassandra {{ cassandra_address }}"
+    command: "cqlsh --cqlversion=3.4.0 -e \"CREATE KEYSPACE test_keyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : {{ ansible_play_hosts | length }} };\" -u cassandra -p cassandra {{ cassandra_address }}"
     run_once: true
     changed_when: false
 
@@ -30,4 +30,4 @@
     command: "cqlsh --cqlversion=3.4.0 -e \"DROP KEYSPACE test_keyspace;\" -u cassandra -p cassandra {{ cassandra_address }}"
     run_once: true
     changed_when: false
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  delegate_to: "{{ ansible_play_hosts[0] }}"

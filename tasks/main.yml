@@ -7,7 +7,7 @@
 - name: Check if cluster has odd number of hosts
   fail:
     msg: "The number of hosts in inventory MUST NOT be even"
-  when: groups[cassandra_hosts_group] | length is even
+  when: ansible_play_hosts | length is even
 
 - name: Check if cassandra_alter_password variable is set to perform configuration
   fail:

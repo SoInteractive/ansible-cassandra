@@ -8,27 +8,15 @@ verifier:
   name: testinfra
 docker:
   containers:
-  - name: cassandra-node01
-    ansible_groups:
-      - cluster
+  - name: node01
     image: jpetazzo/dind
     image_version: latest
     privileged: True
-  - name: cassandra-node02
-    ansible_groups:
-      - cluster
+  - name: node02
     image: jpetazzo/dind
     image_version: latest
     privileged: True
-  - name: cassandra-node03
-    ansible_groups:
-      - cluster
-    image: jpetazzo/dind
-    image_version: latest
-    privileged: True
-  - name: cassandra-single
-    ansible_groups:
-      - single-container
+  - name: node03
     image: jpetazzo/dind
     image_version: latest
     privileged: True

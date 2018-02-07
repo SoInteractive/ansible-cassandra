@@ -6,7 +6,6 @@ cassandra_version: 3.0
 
 #config
 cassandra_cluster_name: "Cassandra Cluster"
-cassandra_hosts_group: "cassandra"
 cassandra_interface: "{{ ansible_default_ipv4.interface }}"
 cassandra_num_tokens: 256
 

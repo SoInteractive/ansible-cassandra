@@ -4,13 +4,13 @@
   package:
     name: python-pip
     state: present
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  delegate_to: "{{ ansible_play_hosts[0] }}"
   run_once: true
 
 - name: Install cqlsh on first node
   pip:
     name: cqlsh
-  delegate_to: "{{ groups[cassandra_hosts_group][0] }}"
+  delegate_to: "{{ ansible_play_hosts[0] }}"
   run_once: true
 
 - name: Ensure cassandra system group exists
