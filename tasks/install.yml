@@ -2,10 +2,18 @@
 
 - name: Install dependencies
   package:
-    name: python-pip
+    name: "{{ item }}"
     state: present
   delegate_to: "{{ ansible_play_hosts[0] }}"
   run_once: true
+  with_items:
+  - python-dev
+  - libpq-dev
+  - libxml2-dev
+  - libxslt1-dev
+  - libldap2-dev
+  - libsasl2-dev
+  - libffi-dev
 
 - name: Install cqlsh on first node
   pip:
