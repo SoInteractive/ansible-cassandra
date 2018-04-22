@@ -7,6 +7,10 @@ Ansible Role: cassandra
 
 This role installs Cassandra cluster and metrics exporter
 
+# :warning: IMPORTANT NOTICE
+
+THIS PROJECT IS ABANDONED. WE DO NOT ACCEPT ANY NEW ISSUES AND/OR PULL REQUESTS.
+
 Requirements
 ------------
 
